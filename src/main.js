@@ -48,13 +48,13 @@ var livingEnemies = [];
 
 function create() {
 
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.physics.startSystem(Phaser.Physics.ARCADE);
 
     //  The scrolling starfield background
-    starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
+    starfield = this.add.tileSprite(0, 0, 800, 600, 'starfield');
 
     //  Our bullet group
-    bullets = game.add.group();
+    bullets = this.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
     bullets.createMultiple(30, 'bullet');
@@ -64,7 +64,7 @@ function create() {
     bullets.setAll('checkWorldBounds', true);
 
     // The enemy's bullets
-    enemyBullets = game.add.group();
+    enemyBullets = this.add.group();
     enemyBullets.enableBody = true;
     enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
     enemyBullets.createMultiple(30, 'enemyBullet');
@@ -74,12 +74,12 @@ function create() {
     enemyBullets.setAll('checkWorldBounds', true);
 
     //  The hero!
-    player = game.add.sprite(400, 500, 'ship');
+    player = this.add.sprite(400, 500, 'ship');
     player.anchor.setTo(0.5, 0.5);
-    game.physics.enable(player, Phaser.Physics.ARCADE);
+    this.physics.enable(player, Phaser.Physics.ARCADE);
 
     //  The baddies!
-    aliens = game.add.group();
+    aliens = this.add.group();
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
 
@@ -87,33 +87,33 @@ function create() {
 
     //  The score
     scoreString = 'Score : ';
-    scoreText = game.add.text(10, 10, scoreString + score, { font: '34px Arial', fill: '#fff' });
+    scoreText = this.add.text(10, 10, scoreString + score, { font: '34px Arial', fill: '#fff' });
 
     //  Lives
-    lives = game.add.group();
-    game.add.text(game.world.width - 100, 10, 'Lives : ', { font: '34px Arial', fill: '#fff' });
+    lives = this.add.group();
+    this.add.text(this.world.width - 100, 10, 'Lives : ', { font: '34px Arial', fill: '#fff' });
 
     //  Text
-    stateText = game.add.text(game.world.centerX,game.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
+    stateText = this.add.text(this.world.centerX,this.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
     stateText.anchor.setTo(0.5, 0.5);
     stateText.visible = false;
 
     for (var i = 0; i < 3; i++) 
     {
-        var ship = lives.create(game.world.width - 100 + (30 * i), 60, 'ship');
+        var ship = lives.create(this.world.width - 100 + (30 * i), 60, 'ship');
         ship.anchor.setTo(0.5, 0.5);
         ship.angle = 90;
         ship.alpha = 0.4;
     }
 
     //  An explosion pool
-    explosions = game.add.group();
+    explosions = this.add.group();
     explosions.createMultiple(30, 'kaboom');
     explosions.forEach(setupInvader, this);
 
     //  And some controls to play the game with
-    cursors = game.input.keyboard.createCursorKeys();
-    fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    cursors = this.input.keyboard.createCursorKeys();
+    fireButton = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 }
 
 function createAliens () {
@@ -134,7 +134,7 @@ function createAliens () {
     aliens.y = 50;
 
     //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.
-    var tween = game.add.tween(aliens).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    var tween = this.add.tween(aliens).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
 
     //  When the tween loops it calls descend
     tween.onLoop.add(descend, this);
@@ -179,14 +179,14 @@ function update() {
             fireBullet();
         }
 
-        if (game.time.now > firingTimer)
+        if (this.time.now > firingTimer)
         {
             enemyFires();
         }
 
         //  Run collision
-        game.physics.arcade.overlap(bullets, aliens, collisionHandler, null, this);
-        game.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer, null, this);
+        this.physics.arcade.overlap(bullets, aliens, collisionHandler, null, this);
+        this.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer, null, this);
     }
 
 }
@@ -195,7 +195,7 @@ function render() {
 
     // for (var i = 0; i < aliens.length; i++)
     // {
-    //     game.debug.body(aliens.children[i]);
+    //     this.debug.body(aliens.children[i]);
     // }
 
 }
@@ -225,7 +225,7 @@ function collisionHandler (bullet, alien) {
         stateText.visible = true;
 
         //the "click to restart" handler
-        game.input.onTap.addOnce(restart,this);
+        this.input.onTap.addOnce(restart,this);
     }
 
 }
@@ -256,7 +256,7 @@ function enemyHitsPlayer (player,bullet) {
         stateText.visible = true;
 
         //the "click to restart" handler
-        game.input.onTap.addOnce(restart,this);
+        this.input.onTap.addOnce(restart,this);
     }
 
 }
@@ -277,15 +277,15 @@ function enemyFires () {
 
     if (enemyBullet && livingEnemies.length > 0)
     {
-        var random=game.rnd.integerInRange(0,livingEnemies.length-1);
+        var random=this.rnd.integerInRange(0,livingEnemies.length-1);
 
         // randomly select one of them
         var shooter=livingEnemies[random];
         // And fire the bullet from this enemy
         enemyBullet.reset(shooter.body.x, shooter.body.y);
 
-        game.physics.arcade.moveToObject(enemyBullet,player,120);
-        firingTimer = game.time.now + 2000;
+        this.physics.arcade.moveToObject(enemyBullet,player,120);
+        firingTimer = this.time.now + 2000;
     }
 
 }
@@ -293,7 +293,7 @@ function enemyFires () {
 function fireBullet () {
 
     //  To avoid them being allowed to fire too fast we set a time limit
-    if (game.time.now > bulletTime)
+    if (this.time.now > bulletTime)
     {
         //  Grab the first bullet we can from the pool
         bullet = bullets.getFirstExists(false);
@@ -303,7 +303,7 @@ function fireBullet () {
             //  And fire it
             bullet.reset(player.x, player.y + 8);
             bullet.body.velocity.y = -400;
-            bulletTime = game.time.now + 200;
+            bulletTime = this.time.now + 200;
         }
     }
 
