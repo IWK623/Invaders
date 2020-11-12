@@ -6,7 +6,7 @@ import AlienManager from '../AlienManager';
 import ScoreManager from '../ScoreManager';
 import rocketFactory from '../RocketFactory';
 
-export default class GameScene extends Scene {
+export default class GameScene extends Phaser.Scene {
 
   constructor(config) {
     super({ key: 'GameScene' });
