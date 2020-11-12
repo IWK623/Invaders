@@ -1,0 +1,10 @@
+{
+    "src" : "src/",
+    "main" : "main.js",
+    "assets" : [
+        "assets"
+    ],
+    "notes" : [
+        "notes"
+    ]
+}
