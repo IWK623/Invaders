@@ -1,1 +1,232 @@
-!function(e){var t={};function s(i){if(t[i])return t[i].exports;var a=t[i]={i:i,l:!1,exports:{}};return e[i].call(a.exports,a,a.exports,s),a.l=!0,a.exports}s.m=e,s.c=t,s.d=function(e,t,i){s.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:i})},s.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},s.t=function(e,t){if(1&t&&(e=s(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(s.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var a in e)s.d(i,a,function(t){return e[t]}.bind(null,a));return i},s.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return s.d(t,"a",t),t},s.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},s.p="/build/",s(s.s=1)}([function(e,t){e.exports=require("phaser")},function(e,t,s){"use strict";s.r(t);var i=s(0),a=0,n=2,o=4,l=6,r=0,h=1,c=2;class d extends i.Scene{constructor(e){super({key:"LoaderScene"})}preload(){this.load.spritesheet("graphic","assets/spaceinvaders.png",{frameWidth:52,frameHeight:36}),this.load.spritesheet("bomb","assets/bomb.png",{frameWidth:12,frameHeight:27}),this.load.image("bullet","assets/bullet.png"),this.load.audio("explosion","assets/audio/explosion.wav"),this.load.audio("shoot","assets/audio/shoot.wav")}create(){this.animFactory(),this.scene.start("GameScene")}animFactory(){this.alienAnimFactory(a),this.alienAnimFactory(n),this.alienAnimFactory(o),this.anims.create({key:"explosion",frames:this.anims.generateFrameNumbers("graphic",{start:7,end:7}),frameRate:1,repeat:1}),this.anims.create({key:"rocket",frames:this.anims.generateFrameNumbers("graphic",{start:l,end:l}),frameRate:0,repeat:0}),this.anims.create({key:"bomb",frames:this.anims.generateFrameNumbers("bomb",{start:0,end:1}),frameRate:6,repeat:-1})}alienAnimFactory(e){this.anims.create({key:"alien"+e,frames:this.anims.generateFrameNumbers("graphic",{start:e,end:e+1}),frameRate:2.5,repeat:-1})}}class u extends i.Scene{constructor(e){super({key:"BootScene"})}preload(){console.log("(C)bit33.io\nSpaceinvaders 0.0.4")}create(){let e=this.game.canvas.height,t=this.game.canvas.width;this.loadingText=this.add.text(t/2,e/2,"Loading..."),this.loadingText.setOrigin(.5),this.scene.start("LoaderScene")}}class m extends Phaser.Physics.Arcade.Sprite{constructor(e){super(e,0,0,"bomb"),this.play("bomb")}throw(e,t){this.enableBody(!0,e,t,!0,!0),this.setCollideWorldBounds(!0),this.body.onWorldBounds=!0,this.setVelocityY(300)}deactivate(){this.disableBody(!0,!0)}}class p extends Phaser.Physics.Arcade.Sprite{constructor(e){super(e,0,0,"bullet")}shoot(e,t){this.scene.sound.play("shoot"),this.setCollideWorldBounds(!0),this.body.onWorldBounds=!0,this.enableBody(!0,e,t,!0,!0),this.setVelocityY(-300)}deactivate(){this.disableBody(!0,!0)}}class y extends Phaser.Physics.Arcade.Sprite{constructor(e,t){super(e,0,0,"graphic",t),this.alienType=t}activate(e,t){this.play("alien"+this.alienType),this.setCollideWorldBounds(!0),this.body.onWorldBounds=!0,this.enableBody(!0,e,t,!0,!0)}deactivate(){this.disableBody(!0,!0)}explode(){this.scene.sound.play("explosion"),this.deactivate()}}class b extends y{constructor(e){super(e,a)}}class g extends y{constructor(e){super(e,n)}}class f extends y{constructor(e){super(e,o)}}function v(e){e.deactivate()}class x{constructor(e,t){this.scene=e,this.maxY=e.game.canvas.height,this.aliensStartVelocity=40,this.aliens1=e.physics.add.group({maxSize:26,classType:b,runChildUpdate:!0}),this.aliens2=e.physics.add.group({maxSize:26,classType:g,runChildUpdate:!0}),this.aliens3=e.physics.add.group({maxSize:13,classType:f,runChildUpdate:!0}),this.init(t)}addColider(e,t,s){s.physics.add.collider(this.aliens1,e,t,null,s),s.physics.add.collider(this.aliens2,e,t,null,s),s.physics.add.collider(this.aliens3,e,t,null,s)}restart(e){this.level=e,this.forAllAliens(v),this.init(e)}init(e){this.level=e,this.makeAlienRow(0,this.aliens1),this.makeAlienRow(1,this.aliens1),this.makeAlienRow(2,this.aliens2),this.makeAlienRow(3,this.aliens2),this.makeAlienRow(4,this.aliens3),this.aliensVelocity=this.aliensStartVelocity+5*(e-1),this.aliens1.setVelocityX(this.aliensVelocity),this.aliens2.setVelocityX(this.aliensVelocity),this.aliens3.setVelocityX(this.aliensVelocity),this.alienThrowsBombInFuture()}makeAlienRow(e,t){for(var s=0;s<=12;s++){let i=100+54*s,a=70+50*e;t.get().activate(i,a)}}countAliensDetailed(){const e=this.aliens1.countActive(),t=this.aliens2.countActive();return{all:e+t+this.aliens3.countActive(),aliens1:e,aliens2:t,aliens3:e}}testAllAliensDead(){return 0===this.countAliensDetailed().all}getRandomAlien(){const e=this.countAliensDetailed();if(e.all>0){let t=Math.floor(Math.random()*e.all),s=this.aliens1;t>=e.aliens1&&(s=this.aliens2,t-=e.aliens1),t>=e.aliens2&&(s=this.aliens3,t-=e.aliens2);return s.getFirstNth(t,!0,!1)}}alienThrowsBombInFuture(){let e=400+4e3*Math.random();this.scene.time.addEvent({delay:e,callback:this.alienThrowsBomb,callbackScope:this})}alienThrowsBomb(){if(this.scene.state==h){const e=this.getRandomAlien();null!=e&&this.scene.bombs.get().throw(e.x,e.y+10)}this.alienThrowsBombInFuture()}onWorldbounds(e){let t=!1;if(e.gameObject.active){if(this.aliens1.contains(e.gameObject)||this.aliens2.contains(e.gameObject)||this.aliens3.contains(e.gameObject)){this.aliensVelocity=1.02*-this.aliensVelocity,this.aliens1.setVelocityX(this.aliensVelocity),this.aliens2.setVelocityX(this.aliensVelocity),this.aliens3.setVelocityX(this.aliensVelocity);const e=function(e){return e.y+5>this.maxY}.bind(this);t=this.aliens1.getChildren().find(e)||this.aliens2.getChildren().find(e)||this.aliens3.getChildren().find(e),t||this.forAllAliens((function(e){e.y+=5}))}}return t}forAllAliens(e){this.aliens1.getChildren().forEach(e),this.aliens2.getChildren().forEach(e),this.aliens3.getChildren().forEach(e)}gameover(){this.aliens1.setVelocityX(0),this.aliens1.setVelocityY(0),this.aliens2.setVelocityX(0),this.aliens2.setVelocityY(0),this.aliens3.setVelocityX(0),this.aliens3.setVelocityY(0)}}function w(e){return e.toLocaleString("en",{minimumIntegerDigits:4,minimumFractionDigits:0,useGrouping:!1})}class S{constructor(e){const t={fontSize:"16px",fontFamily:"Pixel",fill:"#ffffff"};e.add.text(16,16,"SCORE   HI-SCORE",t),this.scoreText=e.add.text(22,32,"",t),this.hiScore=0,this.score=0}setHiScore(){this.score>this.hiScore&&(this.hiScore=this.score),this.score=0,this.print()}point(){this.score++,this.print()}print(){this.scoreText.setText(w(this.score)+"     "+w(this.hiScore))}}var k=new class{create(e){let t=e.physics.add.sprite(300,500,"graphic",l).setImmovable(!0);return t.setCollideWorldBounds(!0),t.body.onWorldBounds=!0,t.body.world.on("worldbounds",(function(e){e.gameObject===this&&this.setActive(!1)}),t),t}};class V extends i.Scene{constructor(e){super({key:"GameScene"})}create(){this.createText(),this.level=1,this.sound.add("explosion"),this.sound.add("shoot"),this.cursors=this.input.keyboard.createCursorKeys(),this.rocket=k.create(this),this.bullets=this.physics.add.group({maxSize:20,classType:p,runChildUpdate:!0}),this.bombs=this.physics.add.group({maxSize:20,classType:m,runChildUpdate:!0}),this.alienManager=new x(this,this.level),this.physics.world.on("worldbounds",this.onWorldbounds,this),this.alienManager.addColider(this.bullets,this.alienHitEvent,this),this.alienManager.addColider(this.rocket,this.alienOnRocketEvent,this),this.physics.add.collider(this.rocket,this.bombs,this.bombHitEvent,null,this),this.input.keyboard.on("keydown",this.handleKey,this),this.scoreManager=new S(this),this.scoreManager.print(),this.state=h}createText(){const e=this.game.canvas.height,t=this.game.canvas.width,s={fontSize:"44px",fontFamily:"Pixel",fill:"#ffffff"};this.gameoverText=this.add.text(t/2,e/2-100,"GAME OVER",s).setVisible(!1).setDepth(1),this.gameoverText.setOrigin(.5),this.beginText=this.add.text(t/2,e/2-60,"PRESS ANY KEY FOR NEW GAME",s).setVisible(!1).setDepth(1),this.beginText.setOrigin(.5)}onWorldbounds(e){this.bullets.contains(e.gameObject)&&e.gameObject.deactivate();this.bombs.contains(e.gameObject)&&e.gameObject.deactivate(),this.state==h&&this.alienManager.onWorldbounds(e)&&this.gameover()}update(){this.handleCursor()}handleCursor(){this.state==h?this.cursors.left.isDown?this.rocket.setVelocityX(-160):this.cursors.right.isDown?this.rocket.setVelocityX(160):this.rocket.setVelocityX(0):this.rocket.setVelocityX(0)}handleKey(e){switch(this.state){case h:"Space"==e.code&&this.fireBullet();break;case r:this.restartGame()}}fireBullet(){const e=this.bullets.get();e&&e.shoot(this.rocket.x-1,this.rocket.y-18)}alienHitEvent(e,t){this.state==h&&e.active&&t.active&&(t.deactivate(),e.explode(),this.scoreManager.point(),this.alienManager.testAllAliensDead()&&this.levelUp())}alienOnRocketEvent(e,t){this.state==h&&e.active&&this.gameover()}bombHitEvent(e,t){this.state==h&&t.active&&this.gameover()}levelUp(){this.level++,this.time.addEvent({delay:2e3,callback:this.restart(),callbackScope:this})}restart(){this.alienManager.restart(this.level)}gameover(){this.state=c,this.sound.play("explosion"),this.rocket.play("explosion"),this.time.removeAllEvents(),this.alienManager.gameover(),this.bullets.getChildren().forEach((function(e){e.deactivate()})),this.bombs.setVelocityX(0),this.bombs.setVelocityY(0),this.gameoverText.setVisible(!0),this.aliensStartVelocity=40,this.time.addEvent({delay:3e3,callback:function(){this.ready()},callbackScope:this})}ready(){this.state=r,this.beginText.setVisible(!0)}restartGame(){this.state=h,this.level=1,this.scoreManager.setHiScore(),this.rocket.play("rocket"),this.beginText.setVisible(!1),this.gameoverText.setVisible(!1),this.bombs.getChildren().forEach((function(e){e.deactivate()})),this.restart()}}var A,T={type:Phaser.AUTO,parent:"phaser-example",width:800,height:600,backgroundColor:"#dbcf8b",physics:{default:"arcade",arcade:{gravity:{y:0}}},scene:[u,d,V]};function C(){var e=document.querySelector("canvas"),t=window.innerWidth,s=window.innerHeight,i=t/s,a=A.config.width/A.config.height;i<a?(e.style.width=t+"px",e.style.height=t/a+"px"):(e.style.width=s*a+"px",e.style.height=s+"px")}window.onload=function(){A=new Phaser.Game(T),window.focus(),C(),window.addEventListener("resize",C)}}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/build/";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./src/Alien.js":
+/*!**********************!*\
+  !*** ./src/Alien.js ***!
+  \**********************/
+/*! exports provided: Alien1, Alien2, Alien3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Alien1\", function() { return Alien1; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Alien2\", function() { return Alien2; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Alien3\", function() { return Alien3; });\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _GC__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GC */ \"./src/GC.js\");\n\n\n\nclass Alien extends Phaser.Physics.Arcade.Sprite {\n\n  constructor(scene, alienType) {\n    super(scene, 0, 0, \"graphic\", alienType);\n    this.alienType = alienType;\n  }\n\n  activate(x, y) {\n    this.play(\"alien\" + this.alienType);\n    this.setCollideWorldBounds(true);\n    this.body.onWorldBounds = true;\n    this.enableBody(true, x, y, true, true);\n  }\n\n  deactivate() {\n    this.disableBody(true, true);\n  }\n\n  explode() {\n    this.scene.sound.play('explosion');\n    this.deactivate();\n  }\n}\n\nclass Alien1 extends Alien {\n\n  constructor(scene) {\n    super(scene, _GC__WEBPACK_IMPORTED_MODULE_1__[\"GC\"].ALIEN_1);\n  }\n}\n\nclass Alien2 extends Alien {\n\n  constructor(scene) {\n    super(scene, _GC__WEBPACK_IMPORTED_MODULE_1__[\"GC\"].ALIEN_2);\n  }\n}\n\nclass Alien3 extends Alien {\n\n  constructor(scene) {\n    super(scene, _GC__WEBPACK_IMPORTED_MODULE_1__[\"GC\"].ALIEN_3);\n  }\n}\n\n\n//# sourceURL=webpack:///./src/Alien.js?");
+
+/***/ }),
+
+/***/ "./src/AlienManager.js":
+/*!*****************************!*\
+  !*** ./src/AlienManager.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return AlienManager; });\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _Alien__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Alien */ \"./src/Alien.js\");\n/* harmony import */ var _GC__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GC */ \"./src/GC.js\");\n\n\n\n\nfunction deactivateAlien(alien) {\n   alien.deactivate();\n }\n\nclass AlienManager {\n\n  constructor(scene, level) {\n    this.scene = scene;\n\n    this.maxY = scene.game.canvas.height;\n    this.aliensStartVelocity = 40;\n\n    this.aliens1 = scene.physics.add.group({\n      maxSize: 26,\n      classType: _Alien__WEBPACK_IMPORTED_MODULE_1__[\"Alien1\"],\n      runChildUpdate: true\n    });\n\n    this.aliens2 = scene.physics.add.group({\n      maxSize: 26,\n      classType: _Alien__WEBPACK_IMPORTED_MODULE_1__[\"Alien2\"],\n      runChildUpdate: true\n    });\n    this.aliens3 = scene.physics.add.group({\n      maxSize: 13,\n      classType: _Alien__WEBPACK_IMPORTED_MODULE_1__[\"Alien3\"],\n      runChildUpdate: true\n    });\n\n    this.init(level);\n  }\n\n  addColider(other, eventHandler, scene) {\n    scene.physics.add.collider(this.aliens1, other, eventHandler, null, scene);\n    scene.physics.add.collider(this.aliens2, other, eventHandler, null, scene);\n    scene.physics.add.collider(this.aliens3, other, eventHandler, null, scene);\n  }\n\n  restart(level) {\n    this.level = level;\n    this.forAllAliens(deactivateAlien);\n    this.init(level);\n  }\n\n  init(level) {\n    this.level = level;\n    this.makeAlienRow(0, this.aliens1);\n    this.makeAlienRow(1, this.aliens1);\n    this.makeAlienRow(2, this.aliens2);\n    this.makeAlienRow(3, this.aliens2);\n    this.makeAlienRow(4, this.aliens3);\n\n    this.aliensVelocity = this.aliensStartVelocity + (5 * (level - 1));\n    this.aliens1.setVelocityX(this.aliensVelocity);\n    this.aliens2.setVelocityX(this.aliensVelocity);\n    this.aliens3.setVelocityX(this.aliensVelocity);\n\n    this.alienThrowsBombInFuture();\n  }\n\n  makeAlienRow(row, aliens) {\n    for (var column = 0; column <= 12; column++) {\n      let x = 100 + (column * 54);\n      let y = 70 + (row * 50);\n      aliens.get().activate(x, y);\n    }\n  }\n\n  countAliensDetailed() {\n    const nrOfAliens1 = this.aliens1.countActive();\n    const nrOfAliens2 = this.aliens2.countActive();\n    const nrOfAliens3 = this.aliens3.countActive();\n    const nrOfAliens = nrOfAliens1 + nrOfAliens2 + nrOfAliens3;\n    return {\n      all: nrOfAliens,\n      aliens1: nrOfAliens1,\n      aliens2: nrOfAliens2,\n      aliens3: nrOfAliens1\n    }\n  }\n\n  testAllAliensDead() {\n    return this.countAliensDetailed().all === 0;\n  }\n\n  getRandomAlien() {\n    const count = this.countAliensDetailed();\n    if (count.all > 0) {\n      let alienIndex = Math.floor(Math.random() * count.all);\n      let aliens = this.aliens1;\n      if (alienIndex >= count.aliens1) {\n        aliens = this.aliens2;\n        alienIndex -= count.aliens1;\n      }\n      if (alienIndex >= count.aliens2) {\n        aliens = this.aliens3;\n        alienIndex -= count.aliens2;\n      }\n      //const alien = aliens.getChildren()[alienIndex];\n      const alien = aliens.getFirstNth(alienIndex, true, false);\n      return alien;\n    }\n    // return undefined\n  }\n\n  alienThrowsBombInFuture() {\n    let delay = 400 + Math.random() * 4000;\n    this.scene.time.addEvent({\n      delay: delay,\n      callback: this.alienThrowsBomb,\n      callbackScope: this\n    });\n  }\n\n  alienThrowsBomb() {\n    if (this.scene.state == _GC__WEBPACK_IMPORTED_MODULE_2__[\"STATE\"].RUN) {\n      const alien = this.getRandomAlien();\n      if (alien !== undefined && alien !== null) {\n        this.scene.bombs.get().throw(alien.x, alien.y+10);\n      }\n    }\n    this.alienThrowsBombInFuture();\n  }\n\n  onWorldbounds(body) {\n    let gameover = false;\n    if (body.gameObject.active) {\n      const isAlien = this.aliens1.contains(body.gameObject)\n                   || this.aliens2.contains(body.gameObject)\n                   || this.aliens3.contains(body.gameObject);\n      if (isAlien) {\n        this.aliensVelocity = -this.aliensVelocity * 1.02;\n        this.aliens1.setVelocityX(this.aliensVelocity);\n        this.aliens2.setVelocityX(this.aliensVelocity);\n        this.aliens3.setVelocityX(this.aliensVelocity);\n\n        const isLanded = (function(alien) {\n          return(alien.y+5 > this.maxY);\n        }).bind(this);\n\n        function moveAlienDown(alien) {\n          alien.y += 5;\n        }\n\n        //TODO: remove expensive call!\n        gameover =\n          this.aliens1.getChildren().find(isLanded)\n          || this.aliens2.getChildren().find(isLanded)\n          || this.aliens3.getChildren().find(isLanded);\n        if (!gameover) {\n          this.forAllAliens(moveAlienDown);\n        }\n      }\n    }\n    return gameover;\n  }\n\n  forAllAliens(f) {\n    this.aliens1.getChildren().forEach(f);\n    this.aliens2.getChildren().forEach(f);\n    this.aliens3.getChildren().forEach(f);\n  }\n\n  gameover() {\n    this.aliens1.setVelocityX(0);\n    this.aliens1.setVelocityY(0);\n    this.aliens2.setVelocityX(0);\n    this.aliens2.setVelocityY(0);\n    this.aliens3.setVelocityX(0);\n    this.aliens3.setVelocityY(0);\n  }\n\n}\n\n\n//# sourceURL=webpack:///./src/AlienManager.js?");
+
+/***/ }),
+
+/***/ "./src/Bomb.js":
+/*!*********************!*\
+  !*** ./src/Bomb.js ***!
+  \*********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Bomb; });\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n\n\nclass Bomb extends Phaser.Physics.Arcade.Sprite {\n\n  constructor(scene) {\n    super(scene, 0, 0, 'bomb');\n    this.play('bomb');\n  }\n\n  throw(x, y) {\n    this.enableBody(true, x, y, true, true);\n    this.setCollideWorldBounds(true);\n    this.body.onWorldBounds = true;\n    this.setVelocityY(300);\n  }\n\n  deactivate() {\n    this.disableBody (true, true);\n  }\n}\n\n\n//# sourceURL=webpack:///./src/Bomb.js?");
+
+/***/ }),
+
+/***/ "./src/Bullet.js":
+/*!***********************!*\
+  !*** ./src/Bullet.js ***!
+  \***********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Bullet; });\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n\n\nclass Bullet extends Phaser.Physics.Arcade.Sprite {\n\n  constructor(scene) {\n    super(scene, 0, 0, 'bullet');\n  }\n\n  shoot(x, y) {\n    this.scene.sound.play('shoot');\n    this.setCollideWorldBounds(true);\n    this.body.onWorldBounds = true;\n    this.enableBody(true, x, y, true, true);\n    this.setVelocityY(-300);\n  }\n\n  deactivate() {\n    this.disableBody (true, true);\n  }\n}\n\n\n//# sourceURL=webpack:///./src/Bullet.js?");
+
+/***/ }),
+
+/***/ "./src/GC.js":
+/*!*******************!*\
+  !*** ./src/GC.js ***!
+  \*******************/
+/*! exports provided: GC, STATE */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"GC\", function() { return GC; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"STATE\", function() { return STATE; });\nvar GC = {\n  ALIEN_1:    0,\n  ALIEN_2:    2,\n  ALIEN_3:    4,\n  ROCKET:     6,\n  EXPLOSION:  7\n}\n\nvar STATE = {\n  READY:    0,\n  RUN:      1,\n  GAMEOVER: 2\n}\n\n\n\n\n//# sourceURL=webpack:///./src/GC.js?");
+
+/***/ }),
+
+/***/ "./src/RocketFactory.js":
+/*!******************************!*\
+  !*** ./src/RocketFactory.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _GC__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GC */ \"./src/GC.js\");\n\n\nclass RocketFactory {\n  create(scene) {\n    let rocket = scene.physics.add.sprite(300, 500, \"graphic\", _GC__WEBPACK_IMPORTED_MODULE_0__[\"GC\"].ROCKET)\n      .setImmovable(true);\n\n    rocket.setCollideWorldBounds(true);\n    rocket.body.onWorldBounds = true;\n    rocket.body.world.on('worldbounds', function(body) {\n      if (body.gameObject === this) {\n        this.setActive(false);\n      }\n    }, rocket);\n\n    return rocket;\n  }\n}\n\nconst rocketFactory = new RocketFactory();\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (rocketFactory);\n\n\n//# sourceURL=webpack:///./src/RocketFactory.js?");
+
+/***/ }),
+
+/***/ "./src/ScoreManager.js":
+/*!*****************************!*\
+  !*** ./src/ScoreManager.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return ScoreManager; });\nfunction padding(s) {\n  return s.toLocaleString('en',\n    {minimumIntegerDigits:4,minimumFractionDigits:0,useGrouping:false});\n}\n\nclass ScoreManager {\n\n  constructor(scene) {\n    const textConfig =\n      { fontSize: '16px',  fontFamily: 'Pixel', fill: \"#ffffff\" };\n    scene.add.text(16, 16, 'SCORE   HI-SCORE', textConfig);\n    this.scoreText = scene.add.text(22, 32, '', textConfig);\n    this.hiScore = 0;\n    this.score = 0;\n  }\n\n  setHiScore() {\n    if (this.score > this.hiScore) {\n      this.hiScore = this.score;\n    }\n    this.score = 0;\n    this.print();\n  }\n\n  point() {\n    this.score++;\n    this.print();\n  }\n\n  print() {\n    this.scoreText.setText(\n      padding(this.score) + '     ' + padding(this.hiScore)\n    );\n  }\n\n}\n\n\n//# sourceURL=webpack:///./src/ScoreManager.js?");
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _scenes_BootScene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scenes/BootScene */ \"./src/scenes/BootScene.js\");\n/* harmony import */ var _scenes_LoaderScene__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scenes/LoaderScene */ \"./src/scenes/LoaderScene.js\");\n/* harmony import */ var _scenes_GameScene__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scenes/GameScene */ \"./src/scenes/GameScene.js\");\n\n\n\n\n\nvar config = {\n  type: Phaser.AUTO,\n  parent: 'phaser-example',\n  width: 800,\n  height: 600,\n  backgroundColor: \"#dbcf8b\",\n  physics: {\n    default: 'arcade',\n    arcade: {\n      gravity: { y: 0  }\n    }\n  },\n  scene: [_scenes_BootScene__WEBPACK_IMPORTED_MODULE_1__[\"default\"], _scenes_LoaderScene__WEBPACK_IMPORTED_MODULE_2__[\"default\"], _scenes_GameScene__WEBPACK_IMPORTED_MODULE_3__[\"default\"]]\n};\n\n// Bootstrap game\nvar game;\nwindow.onload = function() {\n  game = new Phaser.Game(config);\n  window.focus();\n  resizeGame();\n  window.addEventListener(\"resize\", resizeGame);\n}\n\n// Cool resizing function that keeps aspect ratio\nfunction resizeGame() {\n  var canvas = document.querySelector(\"canvas\");\n  var windowWidth = window.innerWidth;\n  var windowHeight = window.innerHeight;\n  var windowRatio = windowWidth / windowHeight;\n  var gameRatio = game.config.width / game.config.height;\n  if (windowRatio < gameRatio) {\n    canvas.style.width = windowWidth + \"px\";\n    canvas.style.height = (windowWidth / gameRatio) + \"px\";\n  } else{\n    canvas.style.width = (windowHeight * gameRatio) + \"px\";\n    canvas.style.height = windowHeight + \"px\";\n  }\n}\n\n\n//# sourceURL=webpack:///./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/scenes/BootScene.js":
+/*!*********************************!*\
+  !*** ./src/scenes/BootScene.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return BootScene; });\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _LoaderScene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LoaderScene */ \"./src/scenes/LoaderScene.js\");\n\n\n\nclass BootScene extends phaser__WEBPACK_IMPORTED_MODULE_0__[\"Scene\"] {\n\n  constructor(config) {\n    super({ key: 'BootScene' });\n  }\n\n  preload () {\n    console.log(\"(C)bit33.io\\nSpaceinvaders 0.0.4\");\n  }\n\n  create () {\n    let sizeY = this.game.canvas.height;\n    let sizeX = this.game.canvas.width;\n\n    this.loadingText = this.add.text(sizeX / 2, sizeY / 2, 'Loading...');\n    this.loadingText.setOrigin(0.5);\n\n    this.scene.start('LoaderScene');\n  }\n}\n\n\n//# sourceURL=webpack:///./src/scenes/BootScene.js?");
+
+/***/ }),
+
+/***/ "./src/scenes/GameScene.js":
+/*!*********************************!*\
+  !*** ./src/scenes/GameScene.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return GameScene; });\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _GC__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GC */ \"./src/GC.js\");\n/* harmony import */ var _Bomb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Bomb */ \"./src/Bomb.js\");\n/* harmony import */ var _Bullet__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Bullet */ \"./src/Bullet.js\");\n/* harmony import */ var _AlienManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../AlienManager */ \"./src/AlienManager.js\");\n/* harmony import */ var _ScoreManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../ScoreManager */ \"./src/ScoreManager.js\");\n/* harmony import */ var _RocketFactory__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../RocketFactory */ \"./src/RocketFactory.js\");\n\n\n\n\n\n\n\n\nclass GameScene extends phaser__WEBPACK_IMPORTED_MODULE_0__[\"Scene\"] {\n\n  constructor(config) {\n    super({ key: 'GameScene' });\n  }\n\n  create () {\n    this.createText();\n\n    this.level = 1;\n    this.sound.add('explosion');\n    this.sound.add('shoot');\n    this.cursors = this.input.keyboard.createCursorKeys();\n\n    this.rocket = _RocketFactory__WEBPACK_IMPORTED_MODULE_6__[\"default\"].create(this);\n    this.bullets = this.physics.add.group({\n      maxSize: 20,\n      classType: _Bullet__WEBPACK_IMPORTED_MODULE_3__[\"default\"],\n      runChildUpdate: true\n    });\n\n    this.bombs = this.physics.add.group({\n      maxSize: 20,\n      classType: _Bomb__WEBPACK_IMPORTED_MODULE_2__[\"default\"],\n      runChildUpdate: true\n    });\n    this.alienManager = new _AlienManager__WEBPACK_IMPORTED_MODULE_4__[\"default\"](this, this.level);\n\n    this.physics.world.on('worldbounds', this.onWorldbounds, this);\n    this.alienManager.addColider(this.bullets, this.alienHitEvent, this);\n    this.alienManager.addColider(this.rocket, this.alienOnRocketEvent, this);\n    this.physics.add.collider(this.rocket, this.bombs, this.bombHitEvent, null, this);\n\n    this.input.keyboard.on(\"keydown\", this.handleKey, this);\n\n    this.scoreManager = new _ScoreManager__WEBPACK_IMPORTED_MODULE_5__[\"default\"](this);\n    this.scoreManager.print();\n    this.state = _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].RUN;\n  }\n\n  createText() {\n    const sizeY = this.game.canvas.height;\n    const sizeX = this.game.canvas.width;\n    const textConfig =\n      { fontSize: '44px',  fontFamily: 'Pixel', fill: \"#ffffff\" };\n\n    this.gameoverText = this.add.text(sizeX / 2, sizeY / 2 - 100,\n      'GAME OVER', textConfig)\n      .setVisible(false)\n      .setDepth(1);\n    this.gameoverText.setOrigin(0.5);\n\n    this.beginText = this.add.text(sizeX / 2, (sizeY / 2) - 60,\n     'PRESS ANY KEY FOR NEW GAME', textConfig)\n      .setVisible(false)\n      .setDepth(1);\n    this.beginText.setOrigin(0.5);\n  }\n\n  onWorldbounds(body) {\n    const isBullet = this.bullets.contains(body.gameObject);\n    if (isBullet) {\n      body.gameObject.deactivate();\n    }\n\n    const isBomb = this.bombs.contains(body.gameObject);\n    if (isBomb) {\n      body.gameObject.deactivate();\n    }\n\n    if (this.state == _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].RUN) {\n      if (this.alienManager.onWorldbounds(body)) {\n        this.gameover();\n      }\n    };\n  };\n\n  update() {\n    this.handleCursor();\n  }\n\n  handleCursor() {\n    if (this.state == _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].RUN) {\n      if (this.cursors.left.isDown) {\n        this.rocket.setVelocityX(-160);\n      } else if (this.cursors.right.isDown) {\n        this.rocket.setVelocityX(160);\n      } else {\n        this.rocket.setVelocityX(0);\n      }\n    } else {\n      this.rocket.setVelocityX(0);\n    }\n  }\n\n  handleKey(e){\n    switch(this.state) {\n      case _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].RUN:\n        if(e.code == \"Space\") {\n           this.fireBullet();\n        }\n        break;\n      case _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].READY:\n        this.restartGame();\n        break;\n    }\n  }\n\n  fireBullet() {\n    const bullet = this.bullets.get();\n    if (bullet) {\n      bullet.shoot(this.rocket.x-1, this.rocket.y-18);\n    }\n  }\n\n  alienHitEvent(alien, bullet) {\n    if (this.state == _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].RUN && alien.active && bullet.active) {\n      bullet.deactivate();\n      alien.explode();\n      this.scoreManager.point();\n      if (this.alienManager.testAllAliensDead()) {\n        this.levelUp();\n      }\n    }\n  }\n\n  alienOnRocketEvent(alien, rocket) {\n    if (this.state == _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].RUN && alien.active) {\n      this.gameover();\n    }\n  }\n\n  bombHitEvent(rocket, bomb) {\n    if (this.state == _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].RUN && bomb.active) {\n      this.gameover();\n    }\n  }\n\n  levelUp() {\n    this.level++;\n    this.time.addEvent(\n      { delay: 2000, callback: this.restart(), callbackScope: this});﻿﻿\n  }\n\n  restart() {\n    this.alienManager.restart(this.level);\n  }\n\n  gameover() {\n    this.state = _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].GAMEOVER;\n    this.sound.play('explosion');\n    this.rocket.play('explosion');\n    this.time.removeAllEvents();\n    this.alienManager.gameover();\n    this.bullets.getChildren().forEach(\n      function(bullet) { bullet.deactivate(); }\n    );\n    this.bombs.setVelocityX(0);\n    this.bombs.setVelocityY(0);\n    this.gameoverText.setVisible(true);\n    this.aliensStartVelocity = 40;\n\n    this.time.addEvent({\n      delay: 3000,\n      callback: function() { this.ready(); },\n      callbackScope: this\n    });\n  }\n\n  ready() {\n    this.state = _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].READY;\n    this.beginText.setVisible(true);\n  }\n\n  restartGame() {\n    this.state = _GC__WEBPACK_IMPORTED_MODULE_1__[\"STATE\"].RUN;\n    this.level = 1;\n    this.scoreManager.setHiScore();\n\n    this.rocket.play('rocket');\n    this.beginText.setVisible(false);\n    this.gameoverText.setVisible(false);\n    this.bombs.getChildren().forEach(\n      function(bomb) { bomb.deactivate(); }\n    );\n    this.restart();\n  }\n}\n\n\n//# sourceURL=webpack:///./src/scenes/GameScene.js?");
+
+/***/ }),
+
+/***/ "./src/scenes/LoaderScene.js":
+/*!***********************************!*\
+  !*** ./src/scenes/LoaderScene.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return LoaderScene; });\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! phaser */ \"phaser\");\n/* harmony import */ var phaser__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(phaser__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _GC__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GC */ \"./src/GC.js\");\n\n\n\nclass LoaderScene extends phaser__WEBPACK_IMPORTED_MODULE_0__[\"Scene\"] {\n\n  constructor(config) {\n    super({ key: 'LoaderScene' });\n  }\n\n  preload () {\n    this.load.spritesheet('graphic', 'assets/spaceinvaders.png', {\n      frameWidth: 13*4,\n      frameHeight: 9*4\n    });\n    this.load.spritesheet('bomb', 'assets/bomb.png', {\n      frameWidth: 3*4,\n      frameHeight: 27//7*4\n    });\n\n    this.load.image('bullet', 'assets/bullet.png');\n    this.load.audio('explosion', 'assets/audio/explosion.wav');\n    this.load.audio('shoot', 'assets/audio/shoot.wav');\n  }\n\n  create () {\n    this.animFactory();\n    this.scene.start('GameScene');\n  }\n\n  animFactory() {\n    this.alienAnimFactory(_GC__WEBPACK_IMPORTED_MODULE_1__[\"GC\"].ALIEN_1);\n    this.alienAnimFactory(_GC__WEBPACK_IMPORTED_MODULE_1__[\"GC\"].ALIEN_2);\n    this.alienAnimFactory(_GC__WEBPACK_IMPORTED_MODULE_1__[\"GC\"].ALIEN_3);\n\n    this.anims.create({\n      key: 'explosion',\n      frames: this.anims.generateFrameNumbers('graphic', {start: 7, end: 7 }),\n      frameRate: 1,\n      repeat: 1\n    });\n\n    this.anims.create({\n      key: 'rocket',\n      frames: this.anims.generateFrameNumbers('graphic',\n        {start: _GC__WEBPACK_IMPORTED_MODULE_1__[\"GC\"].ROCKET, end: _GC__WEBPACK_IMPORTED_MODULE_1__[\"GC\"].ROCKET }),\n      frameRate: 0,\n      repeat: 0\n    });\n\n    this.anims.create({\n      key: 'bomb',\n      frames: this.anims.generateFrameNumbers('bomb', {start: 0, end: 1 }),\n      frameRate: 6,\n      repeat: -1\n    });\n  }\n\n  alienAnimFactory(alienType) {\n    this.anims.create({\n        key: 'alien' + alienType,\n        frames: this.anims.generateFrameNumbers('graphic',\n          { start: alienType, end: alienType + 1 }),\n        frameRate: 2.5,\n        repeat: -1\n    });\n  }\n}\n\n\n//# sourceURL=webpack:///./src/scenes/LoaderScene.js?");
+
+/***/ }),
+
+/***/ "phaser":
+/*!*************************!*\
+  !*** external "phaser" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"phaser\");\n\n//# sourceURL=webpack:///external_%22phaser%22?");
+
+/***/ })
+
+/******/ });

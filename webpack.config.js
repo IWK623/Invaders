@@ -5,7 +5,7 @@ const path = require('path');
 var nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     performance: {
       hints: false
     },
@@ -27,10 +27,10 @@ module.exports = {
           }
         ]
     },
-    
-    target: 'node', // in order to ignore built-in modules like path, fs, etc.
-    externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
-    
+
+    target: 'node',
+    externals: [nodeExternals()],
+
     plugins: [
         new webpack.DefinePlugin({
             'CANVAS_RENDERER': JSON.stringify(true),
