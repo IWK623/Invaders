@@ -22,12 +22,12 @@ var config = {
 
 // Bootstrap game
 var game;
-window.onload = function() {
-  game = new Phaser.Game(config);
-  window.focus();
-  resizeGame();
-  window.addEventListener("resize", resizeGame);
-}
+
+
+game = new Phaser.Game(config);
+// window.focus();
+// resizeGame();
+// window.addEventListener("resize", resizeGame);
 
 // Cool resizing function that keeps aspect ratio
 function resizeGame() {
