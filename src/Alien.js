@@ -20,7 +20,7 @@ class Alien extends Phaser.Physics.Arcade.Sprite {
   }
 
   explode() {
-    this.scene.sound.play('explosion');
+    // this.scene.sound.play('explosion');
     this.deactivate();
   }
 }
