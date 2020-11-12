@@ -67,7 +67,7 @@ export default class AlienManager {
     for (var column = 0; column <= 12; column++) {
       let x = 100 + (column * 54);
       let y = 70 + (row * 50);
-      // aliens.get().activate(x, y);
+      aliens.get().activate(x, y);
     }
   }
 
