@@ -1,5 +1,20 @@
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+
+var config = {
+    type: Phaser.WEBGL,
+    width: 800,
+    height: 600,
+    backgroundColor: '#bfcc00',
+    parent: 'phaser-example',
+    scene: {
+        preload: preload,
+        create: create,
+        update: update,
+        render: render
+    }
+};
+
+var game = new Phaser.Game(config);
 
 function preload() {
 
@@ -12,6 +27,8 @@ function preload() {
     // game.load.image('background', './assets/games/starstruck/background2.png');
 
 }
+
+
 
 var player;
 var aliens;
