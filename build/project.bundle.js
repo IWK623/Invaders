@@ -130,7 +130,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Bullet; });\n// import 'phaser';\n\nclass Bullet extends Phaser.Physics.Arcade.Sprite {\n\n  constructor(scene) {\n    super(scene, 0, 0, 'bullet');\n  }\n\n  shoot(x, y) {\n    this.scene.sound.play('shoot');\n    this.setCollideWorldBounds(true);\n    this.body.onWorldBounds = true;\n    this.enableBody(true, x, y, true, true);\n    this.setVelocityY(-300);\n  }\n\n  deactivate() {\n    this.disableBody (true, true);\n  }\n}\n\n\n//# sourceURL=webpack:///./src/Bullet.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Bullet; });\n// import 'phaser';\n\nclass Bullet extends Phaser.Physics.Arcade.Sprite {\n\n  constructor(scene) {\n    super(scene, 0, 0, 'bullet');\n  }\n\n  shoot(x, y) {\n    // this.scene.sound.play('shoot');\n    this.setCollideWorldBounds(true);\n    this.body.onWorldBounds = true;\n    this.enableBody(true, x, y, true, true);\n    this.setVelocityY(-300);\n  }\n\n  deactivate() {\n    this.disableBody (true, true);\n  }\n}\n\n\n//# sourceURL=webpack:///./src/Bullet.js?");
 
 /***/ }),
 
