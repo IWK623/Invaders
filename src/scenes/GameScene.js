@@ -16,8 +16,8 @@ export default class GameScene extends Phaser.Scene {
     this.createText();
 
     this.level = 1;
-    this.sound.add('explosion');
-    this.sound.add('shoot');
+    // this.sound.add('explosion');
+    // this.sound.add('shoot');
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.rocket = rocketFactory.create(this);
