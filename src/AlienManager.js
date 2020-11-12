@@ -49,7 +49,6 @@ export default class AlienManager {
   init(level) {
     this.level = level;
     this.makeAlienRow(0, this.aliens1);
-    return;
     this.makeAlienRow(1, this.aliens1);
     this.makeAlienRow(2, this.aliens2);
     this.makeAlienRow(3, this.aliens2);
