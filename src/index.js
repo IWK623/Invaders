@@ -3,7 +3,6 @@ import BootScene from './scenes/BootScene';
 import LoaderScene from './scenes/LoaderScene';
 import GameScene from './scenes/GameScene';
 
-console.log("Hello.....!!!!!1");
 
 var config = {
   type: Phaser.AUTO,
