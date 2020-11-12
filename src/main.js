@@ -17,14 +17,12 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload() {
-    console.log(game);
-    console.log(this);
-    game.load.image('bullet', './assets/bullet.png');
-    game.load.image('enemyBullet', './assets/enemy-bullet.png');
-    game.load.spritesheet('invader', './assets/invader32x32x4.png', 32, 32);
-    game.load.image('ship', './assets/player.png');
-    game.load.spritesheet('kaboom', './assets/explode.png', 128, 128);
-    game.load.image('starfield', './assets/starfield.png');
+    this.load.image('bullet', './assets/bullet.png');
+    this.load.image('enemyBullet', './assets/enemy-bullet.png');
+    this.load.spritesheet('invader', './assets/invader32x32x4.png', 32, 32);
+    this.load.image('ship', './assets/player.png');
+    this.load.spritesheet('kaboom', './assets/explode.png', 128, 128);
+    this.load.image('starfield', './assets/starfield.png');
     // game.load.image('background', './assets/games/starstruck/background2.png');
 
 }
