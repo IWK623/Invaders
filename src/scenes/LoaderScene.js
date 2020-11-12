@@ -1,7 +1,7 @@
 // import { Scene } from 'phaser';
 import { GC } from '../GC';
 
-export default class LoaderScene extends Scene {
+export default class LoaderScene extends Phaser.Scene {
 
   constructor(config) {
     super({ key: 'LoaderScene' });
