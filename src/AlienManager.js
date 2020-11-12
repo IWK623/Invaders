@@ -1,4 +1,4 @@
-import 'phaser';
+// import 'phaser';
 import { Alien1, Alien2, Alien3 } from './Alien';
 import { GC, STATE } from './GC';
 

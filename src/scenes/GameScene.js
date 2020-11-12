@@ -1,4 +1,4 @@
-import { Scene, Phaser } from 'phaser';
+// import { Scene, Phaser } from 'phaser';
 import { GC, STATE } from '../GC';
 import Bomb from '../Bomb';
 import Bullet from '../Bullet';

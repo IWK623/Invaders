@@ -1,4 +1,4 @@
-import { Scene } from 'phaser';
+// import { Scene } from 'phaser';
 import { GC } from '../GC';
 
 export default class LoaderScene extends Scene {

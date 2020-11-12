@@ -1,4 +1,4 @@
-import 'phaser';
+// import 'phaser';
 import { GC } from './GC';
 
 class Alien extends Phaser.Physics.Arcade.Sprite {

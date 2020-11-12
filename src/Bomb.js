@@ -1,4 +1,4 @@
-import 'phaser';
+// import 'phaser';
 
 export default class Bomb extends Phaser.Physics.Arcade.Sprite {
 

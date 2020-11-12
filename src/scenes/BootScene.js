@@ -1,4 +1,4 @@
-import { Scene } from 'phaser';
+// import { Scene } from 'phaser';
 import LoaderScene from './LoaderScene';
 
 export default class BootScene extends Scene {
