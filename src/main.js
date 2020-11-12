@@ -17,7 +17,7 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload() {
-
+    console.log(game);
     game.load.image('bullet', './assets/bullet.png');
     game.load.image('enemyBullet', './assets/enemy-bullet.png');
     game.load.spritesheet('invader', './assets/invader32x32x4.png', 32, 32);
