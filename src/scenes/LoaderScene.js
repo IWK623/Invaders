@@ -18,7 +18,7 @@ export default class LoaderScene extends Phaser.Scene {
     });
 
     this.load.image('bullet', 'assets/bullet.png');
-    this.load.audio('explosion', 'assets/audio/explosion.wav');
+    this.load.audio('explosion', 'assets/audio/explosions.wav');
     this.load.audio('shoot', 'assets/audio/shoot.wav');
   }
 
