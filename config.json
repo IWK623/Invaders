@@ -2,7 +2,7 @@
     "src" : "",
     "main" : "build/project.bundle.js",
     "assets" : [
-        "src/assets"
+        "assets"
     ],
     "notes" : [
     ]
