@@ -1,6 +1,6 @@
 {
     "src" : "dist/",
-    "main" : "main.js",
+    "main" : "game.js",
     "assets" : [
         "assets"
     ],
