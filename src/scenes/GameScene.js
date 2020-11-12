@@ -156,7 +156,7 @@ export default class GameScene extends Phaser.Scene {
 
   gameover() {
     this.state = STATE.GAMEOVER;
-    this.sound.play('explosion');
+    // this.sound.play('explosion');
     this.rocket.play('explosion');
     this.time.removeAllEvents();
     this.alienManager.gameover();
