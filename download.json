@@ -1,0 +1,8 @@
+{
+    "main" : "https://firebasestorage.googleapis.com/v0/b/i-hav-b6587.appspot.com/o/sample%2Fproject.bundle.js?alt=media&token=b1a6b3dd-2224-41d4-b153-edb085305139",
+    "assets" : [
+        ["assets/bomb.png" ,"https://firebasestorage.googleapis.com/v0/b/i-hav-b6587.appspot.com/o/sample%2Fassets%2Fbomb.png?alt=media&token=6060ecd5-5358-4c17-be64-0dfdca760ee8"],
+        ["assets/bullet.png" , "https://firebasestorage.googleapis.com/v0/b/i-hav-b6587.appspot.com/o/sample%2Fassets%2Fbullet.png?alt=media&token=4a0c66b6-5c77-43f0-ba76-b58d34abbd58"],
+        ["assets/spaceinvaders.png" , "https://firebasestorage.googleapis.com/v0/b/i-hav-b6587.appspot.com/o/sample%2Fassets%2Fspaceinvaders.png?alt=media&token=64202aa4-e51d-481e-8f42-310ee8454707"]
+    ]
+}
