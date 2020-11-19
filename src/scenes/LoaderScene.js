@@ -8,16 +8,16 @@ export default class LoaderScene extends Phaser.Scene {
   }
 
   preload () {
-    this.load.spritesheet('graphic', 'assets/spaceinvaders.png', {
+    this.load.spritesheet('graphic', SPACEINVADERS_PNG, {
       frameWidth: 13*4,
       frameHeight: 9*4
     });
-    this.load.spritesheet('bomb', 'assets/bomb.png', {
+    this.load.spritesheet('bomb', BOMB_PNG, {
       frameWidth: 3*4,
       frameHeight: 27//7*4
     });
 
-    this.load.image('bullet', 'assets/bullet.png');
+    this.load.image('bullet', BULLET_PNG);
     //this.load.audio('explosion', 'assets/audio/explosions.wav');
     //this.load.audio('shoot', 'assets/audio/shoot.wav');
   }
